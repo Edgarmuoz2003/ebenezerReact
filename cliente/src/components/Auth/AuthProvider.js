@@ -11,7 +11,12 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = () => setIsAuthenticated(true);
+  const login = async (email, contrasenia) => {
+    
+  }
+
+
+
   const logout = () => setIsAuthenticated(false);
 
   return (

@@ -1,0 +1,24 @@
+.container-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/public/img/FondoPag.jpg');
+    background-size: cover;
+}
+
+.card-login {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.555); /* Blanco con 80% de opacidad */
+    border-radius: 8px; /* Bordes redondeados opcionales */
+}
+
+.card-title {
+    text-align: center;
+}
+
+.btn-primary {
+    width: 100%;
+}

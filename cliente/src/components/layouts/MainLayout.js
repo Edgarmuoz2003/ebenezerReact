@@ -1,7 +1,9 @@
 import { useAuth } from "../Auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const MainLayout = ({ children }) => {
   const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -21,13 +23,14 @@ const MainLayout = ({ children }) => {
               <input
                 className="form-control me-2"
                 type="search"
-                placeholder="Que estas Buscando?"
+                placeholder="Qué estás buscando?"
                 aria-label="Search"
               />
-              <button className="btn btn-outline-success" type="submit">
-                Buscar
+              <button className="btn btn-outline-info" type="submit">
+                <i className="fas fa-search"></i>
               </button>
             </form>
+
             <ul className="navbar-nav mr-auto">
               {isAuthenticated ? (
                 <>
@@ -39,7 +42,12 @@ const MainLayout = ({ children }) => {
                 </>
               ) : (
                 <li className="nav-item">
-                  <a href="/login">Iniciar Sesion</a>
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() => navigate("/login")}
+                  >
+                    Iniciar Sesión
+                  </button>
                 </li>
               )}
             </ul>
