@@ -1,7 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-require('dotenv').config();
+require('./database/conexion');
+require('dotenv').config(); 
+
 
 console.log(process.env.MESSAGE);
 
@@ -13,7 +15,7 @@ App.set('port', process.env.PORT || 5000);
 //midlewares
 App.use(morgan('dev'))
 App.use(cors({
-    origin: "localhost:3000"
+    origin: "http://localhost:3000"
 }))
 App.use(express.json())
 App.use('/api', require('./routes/auth.routes'))
