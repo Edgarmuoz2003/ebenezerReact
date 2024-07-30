@@ -35,7 +35,8 @@ const MainLayout = ({ children }) => {
             </div>
             <ul className="navbar-nav ms-auto">
               {" "}
-              <li className="nav-item">
+              {!isAuthenticated &&
+                <li className="nav-item">
                 <button
                   className="btn btn-outline-primary"
                   onClick={() => navigate("/login")}
@@ -43,6 +44,8 @@ const MainLayout = ({ children }) => {
                   Iniciar Sesión
                 </button>
               </li>
+              }
+              
             </ul>
           </div>
         </nav>

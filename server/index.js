@@ -17,8 +17,9 @@ App.use(morgan('dev'))
 App.use(cors({
     origin: "http://localhost:3000"
 }))
-App.use(express.json())
-App.use('/api', require('./routes/auth.routes'))
+App.use(express.json());
+App.use('/api', require('./routes/auth.routes'));
+App.use('/api', require('./routes/product.routes'));
 
 
 
