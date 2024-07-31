@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
         cb(null, 'uploadedImages/')
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Usar la extensión original del archivo
+        cb(null, Date.now() + '-' + file.originalname);
       },
 })
 
