@@ -1,35 +1,27 @@
 import { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
-import './Productos.css';
-import Swal from 'sweetalert2';
+import "./Productos.css";
+import Swal from "sweetalert2";
 import axios from "axios";
-import { useProducts } from './ProductsProvider'
+import { useProducts } from "./ProductsProvider";
 
 const Productos = () => {
   const [loadImage, setLoadImage] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [productTitle, setProductTitle] = useState('');
-  const [productDescription, setProductDescription] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [category, setCategory] = useState('');
-  const [subCategory, setSubCategory] = useState('');
-  const [sizes, setSizes] = useState({
-    XS: false,
-    S: false,
-    M: false,
-    L: false,
-    XL: false,
-    XXL: false
-  });
+  const [productTitle, setProductTitle] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [sizes, setSizes] = useState({ XS: false, S: false, M: false, L: false, XL: false, XXL: false,});
   const [isPromotion, setIsPromotion] = useState(false);
   const [isFeatured, setIsFeatured] = useState(false);
-  const [error, setError] = useState('');
-  const { productos, loading, errorProductos } = useProducts()
-  
+  const [error, setError] = useState("");
+  const { productos, loading, errorProductos } = useProducts();
 
   const subCategories = {
     pijamas: ["short", "capri", "vestido", "pantalon"],
-    camisetas: []
+    camisetas: [],
   };
 
   const handleLoadImage = (event) => {
@@ -47,31 +39,24 @@ const Productos = () => {
     }
   };
 
-  const resetValues = () =>{
+  const resetValues = () => {
     setLoadImage(null);
     setPreview(null);
-    setProductTitle('');
-    setProductDescription('');
-    setProductPrice('');
-    setCategory('');
-    setSubCategory('');
-    setSizes({
-      XS: false,
-      S: false,
-      M: false,
-      L: false,
-      XL: false,
-      XXL: false
-    });
+    setProductTitle("");
+    setProductDescription("");
+    setProductPrice("");
+    setCategory("");
+    setSubCategory("");
+    setSizes({ XS: false, S: false, M: false, L: false, XL: false, XXL: false, });
     setIsPromotion(false);
     setIsFeatured(false);
-    setError('');
-    document.getElementById('productImage').value = ""; // Restablece el valor del input
+    setError("");
+    document.getElementById("productImage").value = ""; // Restablece el valor del input
 
-    const modal = document.getElementById('exampleModal');
+    const modal = document.getElementById("exampleModal");
     const modalInstance = window.bootstrap.Modal.getInstance(modal);
     modalInstance.hide();
-  }
+  };
 
   const validateForm = () => {
     if (!loadImage) {
@@ -82,7 +67,7 @@ const Productos = () => {
       setError("Por favor, selecciona al menos una talla disponible.");
       return false;
     }
-    setError('');
+    setError("");
     return true;
   };
 
@@ -91,85 +76,108 @@ const Productos = () => {
     if (!validateForm()) {
       return;
     }
-  
+
     // Crear un FormData para enviar la imagen y otros datos
     const formData = new FormData();
-    formData.append('rutaImagen', loadImage);
-    formData.append('productTitle', productTitle);
-    formData.append('productDescription', productDescription);
-    formData.append('productPrice', productPrice);
-    formData.append('category', category);
-    formData.append('subCategory', subCategory);
-    formData.append('sizes', JSON.stringify(Object.keys(sizes).filter(size => sizes[size])));
-    formData.append('isPromotion', isPromotion);
-    formData.append('isFeatured', isFeatured);
-  
+    formData.append("rutaImagen", loadImage);
+    formData.append("productTitle", productTitle);
+    formData.append("productDescription", productDescription);
+    formData.append("productPrice", productPrice);
+    formData.append("category", category);
+    formData.append("subCategory", subCategory);
+    formData.append(
+      "sizes",
+      JSON.stringify(Object.keys(sizes).filter((size) => sizes[size]))
+    );
+    formData.append("isPromotion", isPromotion);
+    formData.append("isFeatured", isFeatured);
+
     try {
-      await axios.post('http://localhost:4000/api/productos', formData, {
+      await axios.post("http://localhost:4000/api/productos", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
       await resetValues();
-      Swal.fire('Éxito', 'El Producto ha Sido Publicado', 'success');
-     
+      Swal.fire("Éxito", "El Producto ha Sido Publicado", "success");
     } catch (error) {
-      console.error('Error al agregar el producto:', error);
+      console.error("Error al agregar el producto:", error);
       // Mostrar mensaje de error
-      Swal.fire('Error', 'El Producto no ha Sido Publicado', 'error');
+      Swal.fire("Error", "El Producto no ha Sido Publicado", "error");
     }
   };
 
   const handleSizeChange = (size) => {
     setSizes((prevSizes) => ({
       ...prevSizes,
-      [size]: !prevSizes[size]
+      [size]: !prevSizes[size],
     }));
   };
 
-  const handleProductsByCategory = () =>{
+  const handleProductsByCategory = (categoria) => {
+    return productos.filter((productos) => productos.category === categoria);
+  };
 
-  }
+  const handleProductsSubByCategory = (subCategoria) => {
+    return productos.filter(
+      (productos) => productos.subCategory === subCategoria
+    );
+  };
 
- 
-
+  const renderProducts = (filteredProducts) => {
+    return (
+      <div className="row">
+        {filteredProducts.map((productos) => {
+          if (loading) {
+            return <div>Loading...</div>;
+          }
+          if (errorProductos) {
+            setError(errorProductos);
+            return <div>{error}</div>;
+          }
+          return (
+            <div className="col-md-4 mb-4" key={productos.id}>
+              <div className="card h-100"> {/* Asegura que todas las tarjetas tengan la misma altura */}
+                <img
+                  src={productos.rutaImagen}
+                  className="card-img-top"
+                  alt={productos.productTitle}
+                  style={{ objectFit: "cover", height: "400px" }} // Asegura que la imagen tenga un tamaño consistente
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{productos.productTitle}</h5>
+                  <p className="card-text">${productos.productPrice}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+  
+  
   return (
     <MainLayout>
       <div className="container">
         <h1>Administrar Productos</h1>
 
         {/* Inicio Modal Agregar Productos */}
-        <section className="seccion-agregar-productos">
+        <section className="seccion-agregar-productos mt-4 mb-4">
           <div className="col-md-2">
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
+            <button type="button" className="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
               Publicar Productos
             </button>
           </div>
 
-          <div
-            className="modal fade"
-            id="exampleModal"
-            tabIndex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
+          <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
                   <h1 className="modal-title fs-5" id="exampleModalLabel">
                     Agregar un Producto
                   </h1>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
                   {error && <div className="alert alert-danger">{error}</div>}
@@ -178,18 +186,11 @@ const Productos = () => {
                       <label htmlFor="productImage" className="form-label">
                         Foto del Producto
                       </label>
-                      <input
-                        type="file"
-                        className="form-control"
-                        name="productImage"
-                        id="productImage"
-                        onChange={handleLoadImage}
-                        required
-                      />
+                      <input type="file" className="form-control" name="productImage" id="productImage" onChange={handleLoadImage} required />
                     </div>
                     {preview && (
                       <div className="form-group">
-                        <img src={preview} alt="Preview" style={{ maxHeight: '300px' }} />
+                        <img src={preview} alt="Preview" style={{ maxHeight: "300px" }} />
                       </div>
                     )}
 
@@ -197,29 +198,14 @@ const Productos = () => {
                       <label htmlFor="productTitle" className="form-label">
                         Titulo de la publicación
                       </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="productTitle"
-                        id="productTitle"
-                        value={productTitle}
-                        onChange={(e) => setProductTitle(e.target.value)}
-                        required
-                      />
+                      <input type="text" className="form-control" name="productTitle" id="productTitle" value={productTitle} onChange={(e) => setProductTitle(e.target.value)} required />
                     </div>
 
                     <div className="mb-3">
-                      <label htmlFor="productDescription" className="form-label">
+                      <label htmlFor="productDescription" className="form-label" >
                         Descripcion del Producto
                       </label>
-                      <textarea
-                        className="form-control"
-                        name="productDescription"
-                        id="productDescription"
-                        value={productDescription}
-                        onChange={(e) => setProductDescription(e.target.value)}
-                        required
-                      />
+                      <textarea className="form-control" name="productDescription" id="productDescription" value={productDescription} onChange={(e) => setProductDescription(e.target.value)} required />
                     </div>
 
                     <div className="mb-3">
@@ -255,7 +241,7 @@ const Productos = () => {
                       </select>
                     </div>
 
-                    {category === 'pijamas' && (
+                    {category === "pijamas" && (
                       <div className="mb-3">
                         <label htmlFor="subCategory" className="form-label">
                           Subcategoría de Pijamas
@@ -299,7 +285,9 @@ const Productos = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">Publicar como producto en Promoción?</label>
+                      <label className="form-label">
+                        Publicar como producto en Promoción?
+                      </label>
                       <div className="form-check">
                         <input
                           type="radio"
@@ -311,7 +299,10 @@ const Productos = () => {
                           onChange={() => setIsPromotion(true)}
                           required
                         />
-                        <label className="form-check-label" htmlFor="isPromotionYes">
+                        <label
+                          className="form-check-label"
+                          htmlFor="isPromotionYes"
+                        >
                           Sí
                         </label>
                       </div>
@@ -326,14 +317,19 @@ const Productos = () => {
                           onChange={() => setIsPromotion(false)}
                           required
                         />
-                        <label className="form-check-label" htmlFor="isPromotionNo">
+                        <label
+                          className="form-check-label"
+                          htmlFor="isPromotionNo"
+                        >
                           No
                         </label>
                       </div>
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">Publicar como producto Destacado?</label>
+                      <label className="form-label">
+                        Publicar como producto Destacado?
+                      </label>
                       <div className="form-check">
                         <input
                           type="radio"
@@ -345,7 +341,10 @@ const Productos = () => {
                           onChange={() => setIsFeatured(true)}
                           required
                         />
-                        <label className="form-check-label" htmlFor="isFeaturedYes">
+                        <label
+                          className="form-check-label"
+                          htmlFor="isFeaturedYes"
+                        >
                           Sí
                         </label>
                       </div>
@@ -360,14 +359,19 @@ const Productos = () => {
                           onChange={() => setIsFeatured(false)}
                           required
                         />
-                        <label className="form-check-label" htmlFor="isFeaturedNo">
+                        <label
+                          className="form-check-label"
+                          htmlFor="isFeaturedNo"
+                        >
                           No
                         </label>
                       </div>
                     </div>
 
                     <div className="modal-footer">
-                    {error && <div className="alert alert-danger">{error}</div>}
+                      {error && (
+                        <div className="alert alert-danger">{error}</div>
+                      )}
                       <button type="submit" className="btn btn-primary">
                         Agregar Producto
                       </button>
@@ -381,58 +385,140 @@ const Productos = () => {
         {/* Fin Modal Agregar Productos */}
 
         <section className="seccion-tab-productos">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="tab-camisetas" data-bs-toggle="tab" data-bs-target="#camisetas-tab-pane" type="button" role="tab" aria-controls="camisetas-tab-pane" aria-selected="true">Camisetas</button>
+          <ul className="nav nav-tabs mt-4" id="myTab" role="tablist">
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link active"
+                id="tab-camisetas"
+                data-bs-toggle="tab"
+                data-bs-target="#camisetas-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="camisetas-tab-pane"
+                aria-selected="true"
+              >
+                Camisetas
+              </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="shots-tab" data-bs-toggle="tab" data-bs-target="#shots-tab-pane" type="button" role="tab" aria-controls="shots-tab-pane" aria-selected="true">Shorts</button>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="shorts-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#shorts-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="shorts-tab-pane"
+                aria-selected="false"
+              >
+                Shorts
+              </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="capris-tab" data-bs-toggle="tab" data-bs-target="#capris-tab-pane" type="button" role="tab" aria-controls="capris-tab-pane" aria-selected="false">Capris</button>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="capris-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#capris-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="capris-tab-pane"
+                aria-selected="false"
+              >
+                Capris
+              </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="pantalon-tab" data-bs-toggle="tab" data-bs-target="#pantalon-tab-pane" type="button" role="tab" aria-controls="pantalon-tab-pane" aria-selected="false">Pantalon</button>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="pantalon-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#pantalon-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="pantalon-tab-pane"
+                aria-selected="false"
+              >
+                Pantalon
+              </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="vestido-tab" data-bs-toggle="tab" data-bs-target="#vestido-tab-pane" type="button" role="tab" aria-controls="vestido-tab-pane" aria-selected="false">Vestido</button>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
+                id="vestido-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#vestido-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="vestido-tab-pane"
+                aria-selected="false"
+              >
+                Vestido
+              </button>
             </li>
           </ul>
-          <div class="tab-content" id="myTabContent">
+          <div className="tab-content" id="myTabContent">
             {/* inicio Contenido Camisetas */}
-            <div class="tab-pane fade show active" id="camisetas-tab-pane" role="tabpanel" aria-labelledby="tab-camisetas" tabindex="0">
-
+            <div
+              className="tab-pane fade show active mt-4"
+              id="camisetas-tab-pane"
+              role="tabpanel"
+              aria-labelledby="tab-camisetas"
+              tabIndex="0"
+            >
+              {renderProducts(handleProductsByCategory("camisetas"))}
             </div>
             {/* fin Contenido Camisetas */}
 
             {/* inicio Contenido shorts */}
-            <div class="tab-pane fade" id="shorts-tab-pane" role="tabpanel" aria-labelledby="shorts-tab" tabindex="0">
-
+            <div
+              className="tab-pane fade mt-4"
+              id="shorts-tab-pane"
+              role="tabpanel"
+              aria-labelledby="shorts-tab"
+              tabIndex="0"
+            >
+              {renderProducts(handleProductsSubByCategory("short"))}
             </div>
             {/* fin Contenido shorts */}
 
-            {/* inicio Contenido shorts */}
-
             {/* inicio Contenido capris */}
-            <div class="tab-pane fade" id="capris-tab-pane" role="tabpanel" aria-labelledby="capris-tab" tabindex="0">
-
+            <div
+              className="tab-pane fade mt-4 "
+              id="capris-tab-pane"
+              role="tabpanel"
+              aria-labelledby="capris-tab"
+              tabIndex="0"
+            >
+              {renderProducts(handleProductsSubByCategory("capri"))}
             </div>
             {/* fin Contenido capris */}
 
-            {/* inicio Contenido pantalon */}                
-            <div class="tab-pane fade" id="pantalon-tab-pane" role="tabpanel" aria-labelledby="pantalon-tab" tabindex="0">
-
+            {/* inicio Contenido pantalon */}
+            <div
+              className="tab-pane fade mt-4"
+              id="pantalon-tab-pane"
+              role="tabpanel"
+              aria-labelledby="pantalon-tab"
+              tabIndex="0"
+            >
+              {renderProducts(handleProductsSubByCategory("pantalon"))}
             </div>
             {/* fin Contenido pantalon */}
 
             {/* inicio Contenido vestidos */}
-            <div class="tab-pane fade" id="vestido-tab-pane" role="tabpanel" aria-labelledby="vestido-tab" tabindex="0">
-
+            <div
+              className="tab-pane fade mt-4"
+              id="vestido-tab-pane"
+              role="tabpanel"
+              aria-labelledby="vestido-tab"
+              tabIndex="0"
+            >
+              {renderProducts(handleProductsSubByCategory("vestido"))}
             </div>
             {/* fin Contenido vestidos */}
           </div>
         </section>
-        
       </div>
     </MainLayout>
   );

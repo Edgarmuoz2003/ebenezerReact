@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 require('./database/conexion');
 require('dotenv').config(); 
+const path = require('path');
 
 
 console.log(process.env.MESSAGE);
@@ -14,6 +15,7 @@ App.set('port', process.env.PORT || 5000);
 
 //midlewares
 App.use(morgan('dev'))
+App.use('/uploadedImages', express.static(path.join(__dirname, 'uploadedImages')));
 App.use(cors({
     origin: "http://localhost:3000"
 }))

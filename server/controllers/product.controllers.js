@@ -27,10 +27,14 @@ productCtls.SaveProduct = async (req, res) => {
 
 productCtls.GetProducts = async (req, res) => {
     try {
-        const [productos] = await db.execute('SELECT * FROM productos')
-        res.send(productos)
+        const [productos] = await db.execute('SELECT * FROM productos');
+        const productosConRutas = productos.map(producto => ({
+            ...producto,
+            rutaImagen: `http://localhost:4000/${producto.rutaImagen.replace(/\\/g, '/')}` // Asegúrate de que sea accesible
+        }));
+        res.send(productosConRutas);
     } catch (error) {
-        res.status(500).json({error: "No se obtuvieron datos " + error})
+        res.status(500).json({ error: "No se obtuvieron datos " + error });
     }
 }
 
