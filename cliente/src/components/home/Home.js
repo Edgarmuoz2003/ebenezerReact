@@ -1,11 +1,14 @@
 import { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import { useProducts } from "../products/ProductsProvider";
+import { useNavigate } from "react-router-dom";
+
 
 
 const Home = () => {
   const [error, setError] = useState(null);
   const { productos, loading, errorProductos } = useProducts();
+  const navigate = useNavigate();
 
   const handleFeaturedProducts = (destacado) => {
     return productos.filter((productos) => productos.isFeatured === destacado);
@@ -14,6 +17,7 @@ const Home = () => {
   const handleSaleProducts = (enPromo) => {
     return productos.filter((productos) => productos.isPromotion === enPromo);
   };
+
 
   const renderProducts = (filteredProducts) => {
     return (
@@ -29,12 +33,18 @@ const Home = () => {
           return (
             <div className="col-md-3 mb-4" key={productos.id}>
               <div className="card h-100"> {/* Asegura que todas las tarjetas tengan la misma altura */}
+
                 <img
                   src={productos.rutaImagen}
                   className="card-img-top"
                   alt={productos.productTitle}
-                  style={{ objectFit: "cover", height: "400px" }} // Asegura que la imagen tenga un tamaño consistente
+                  style={{ objectFit: "cover", height: "400px", cursor: "pointer" }}
+                  onClick={(e)=> {
+                    e.preventDefault();
+                    navigate(`/detalle/${productos.id}`)
+                  }}
                 />
+              
                 <div className="card-body">
                   <h5 className="card-title">{productos.productTitle}</h5>
                   <p className="card-text">${productos.productPrice}</p>

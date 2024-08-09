@@ -13,7 +13,7 @@ const MainLayout = ({ children }) => {
           <div className="container-fluid">
             <a className="navbar-brand logo-nav" href="#">
               <img
-                src="./img/logo-ebenezer.png"
+                src="/img/logo-ebenezer.png"
                 alt="Logo Ebenezer"
                 width="150"
                 height="auto"
@@ -34,18 +34,16 @@ const MainLayout = ({ children }) => {
               </form>
             </div>
             <ul className="navbar-nav ms-auto">
-              {" "}
-              {!isAuthenticated &&
+              {!isAuthenticated && (
                 <li className="nav-item">
-                <button
-                  className="btn btn-outline-primary"
-                  onClick={() => navigate("/login")}
-                >
-                  Iniciar Sesión
-                </button>
-              </li>
-              }
-              
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() => navigate("/login")}
+                  >
+                    Iniciar Sesión
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
@@ -54,9 +52,20 @@ const MainLayout = ({ children }) => {
         {/* inicio segundo nav */}
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
           <div className="container-fluid">
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSecond"
+              aria-controls="navbarSecond"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
             <div
               className="collapse navbar-collapse"
-              id="navbarSupportedContent"
+              id="navbarSecond"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
@@ -101,7 +110,7 @@ const MainLayout = ({ children }) => {
                           <a
                             className="dropdown-item"
                             href="#"
-                            onClick={logout} // Puedes seguir usando la función de logout
+                            onClick={logout}
                           >
                             Cerrar Sesión
                           </a>
@@ -129,23 +138,15 @@ const MainLayout = ({ children }) => {
               <div className="contact-info">
                 <div className="social-icons">
                   <a href="#" className="mx-2" style={{ color: "#4267B2" }}>
-                    {" "}
-                    {/* Facebook */}
                     <i className="fab fa-facebook-f"></i>
                   </a>
                   <a href="#" className="mx-2" style={{ color: "#E1306C" }}>
-                    {" "}
-                    {/* Instagram */}
                     <i className="fab fa-instagram"></i>
                   </a>
                   <a href="#" className="mx-2" style={{ color: "#FF0000" }}>
-                    {" "}
-                    {/* YouTube */}
                     <i className="fab fa-youtube"></i>
                   </a>
                   <a href="#" className="mx-2" style={{ color: "#69C9D0" }}>
-                    {" "}
-                    {/* TikTok */}
                     <i className="fab fa-tiktok"></i>
                   </a>
                 </div>
@@ -160,7 +161,7 @@ const MainLayout = ({ children }) => {
               </div>
               <p>
                 &copy; Copyright 2024 Ebenezer-Store All rights reserved. Nueve
-                Seis Dos SAS | 1067888598-8
+                Seis Dos SAS | 1067888598-8 
               </p>
             </div>
           </div>
@@ -171,3 +172,4 @@ const MainLayout = ({ children }) => {
 };
 
 export default MainLayout;
+

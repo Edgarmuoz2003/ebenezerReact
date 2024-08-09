@@ -8,6 +8,7 @@ import Contactenos from './components/contact/Contactenos';
 import ProtectedRoute from './components/Auth/ProtectedRoutes';
 import Productos from './components/products/Productos';
 import { ProductsProvider } from './components/products/ProductsProvider';
+import DetalleProductos from './components/products/DetalleProductos';
 
 //se añadio AuthProvider (un componente que creé) para proveer de contexto
 //del estado de autenticasion del usuario
@@ -23,6 +24,7 @@ function App() {
             <Route path="/tienda" element={<Tienda />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path='/contactenos' element={<Contactenos />} />
+            <Route path='/detalle/:id' element={<DetalleProductos />} />
             <Route element={<ProtectedRoute />}>
               <Route path='/productos' element={<Productos />} />
             </Route>
