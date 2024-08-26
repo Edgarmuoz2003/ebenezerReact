@@ -1,0 +1,53 @@
+/* Estilos personalizados para la página Nosotros */
+
+.sobre-nosotros-section .hero-section {
+    position: relative;
+    background: url('../../../public/img/baner3.jpeg') no-repeat center center/cover;
+    height: 60vh;
+  }
+  
+  .sobre-nosotros-section .hero-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .sobre-nosotros-section .hero-section .content {
+    z-index: 2;
+  }
+  
+  .sobre-nosotros-section .hero-section .content h1 {
+    color: #ffffff;
+    font-weight: bold;
+  }
+  
+  .sobre-nosotros-section .hero-section .content p {
+    color: #f8f9fa;
+  }
+  
+  .text-primary {
+    color: #007bff !important;
+  }
+  
+  .card {
+    background: #f8f9fa;
+  }
+  
+  .card-body p {
+    margin-bottom: 0;
+  }
+  
+  /* Ajuste de tamaño para las imágenes */
+  .sobre-nosotros-section img {
+    max-width: 100%;  /* Asegura que la imagen no exceda el tamaño de su contenedor */
+    max-height: 400px;  /* Establece una altura máxima */
+    width: auto;
+    height: auto;
+    object-fit: cover; /* Asegura que la imagen mantenga su proporción */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  

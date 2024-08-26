@@ -1,0 +1,21 @@
+.icon-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .icon-item {
+    text-align: center;
+    width: 18%; /* Distribuye los íconos equitativamente */
+  }
+  
+  .icon-item i {
+    color: #333; /* Cambia el color del ícono si es necesario */
+  }
+  
+  .icon-item p {
+    margin-top: 10px;
+    font-size: 14px; /* Ajusta el tamaño del texto según sea necesario */
+  }
+  

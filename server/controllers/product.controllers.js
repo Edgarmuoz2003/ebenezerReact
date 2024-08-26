@@ -1,5 +1,7 @@
 const db = require("../database/conexion");
 const productCtls = {};
+const fs = require('fs');
+const path = require('path');
 
 productCtls.SaveProduct = async (req, res) => {
     const rutaImagen = req.file.path;
@@ -35,6 +37,7 @@ productCtls.UpdateProduct = async (req, res) => {
     const productId = req.params.id; // Asume que el ID del producto se pasa como parámetro en la URL
     const rutaImagen = req.file ? req.file.path : null; // Si hay una nueva imagen, se actualizará
     const { productTitle, productDescription, productPrice, category, subCategory, sizes, isPromotion, isFeatured } = req.body;
+    console.log("Datos recibidos para actualizar el producto:", req.body);
 
     // Asegurarse de que sizes sea un array
     let sizesArray;
@@ -92,6 +95,23 @@ productCtls.UpdateProduct = async (req, res) => {
     }
 };
 
+productCtls.GetOneProduct = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const [producto] = await db.execute('SELECT * FROM productos WHERE id = ?', [id]);
+        if (producto.length === 0) {
+            res.status(404).json({ error: 'No existe ningún producto con el ID suministrado' });
+        } else {
+            res.status(200).send(producto[0]);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+};
+
+
+
 
 productCtls.GetProducts = async (req, res) => {
     try {
@@ -109,21 +129,38 @@ productCtls.GetProducts = async (req, res) => {
 };
 
 productCtls.DeleteProduct = async (req, res) => {
-    const productId = req.params.id; // Asume que el ID del producto se pasa como parámetro en la URL
+    const productId = req.params.id;
 
     try {
-        const result = await db.execute('DELETE FROM productos WHERE id = ?', [productId]);
+        // Primero, obtenemos la ruta de la imagen del producto
+        const [producto] = await db.execute('SELECT rutaImagen FROM productos WHERE id = ?', [productId]);
 
-        // Verificar si se eliminó algún producto
+        if (producto.length === 0) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        const rutaImagen = producto[0].rutaImagen;
+
+        // Intentar eliminar el archivo de imagen del sistema de archivos
+        const imagePath = path.join(__dirname, '..', rutaImagen);
+        fs.unlink(imagePath, (err) => {
+            if (err) {
+                console.error('Error al eliminar la imagen:', err);
+                // Aquí puedes decidir si quieres enviar una respuesta con error o continuar con la eliminación del producto.
+            }
+        });
+
+        // Ahora eliminamos el registro del producto de la base de datos
+        const [result] = await db.execute('DELETE FROM productos WHERE id = ?', [productId]);
+
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Producto no encontrado' });
         }
 
-        res.status(200).json({ message: 'Producto eliminado con éxito' });
+        res.status(200).json({ message: 'Producto e imagen eliminados con éxito' });
     } catch (error) {
         console.error('Error al eliminar el producto:', error);
         res.status(500).json({ error: 'Error al eliminar el producto' });
     }
 };
-
 module.exports = productCtls;

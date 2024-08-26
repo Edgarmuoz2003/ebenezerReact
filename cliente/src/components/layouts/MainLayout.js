@@ -1,5 +1,6 @@
 import { useAuth } from "../Auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import './MainLayout.css';
 
 const MainLayout = ({ children }) => {
   const { isAuthenticated, logout, nombre } = useAuth();
@@ -129,6 +130,30 @@ const MainLayout = ({ children }) => {
       {/* espacio para los elementos hijos */}
       <main>{children}</main>
       {/* final espacio elementos hijos */}
+
+       {/* Sección de íconos */}
+       <div className="icon-container d-flex justify-content-between align-items-center mt-4">
+          <div className="icon-item text-center">
+            <i className="fas fa-shopping-cart fa-2x"></i>
+            <p>Tienda Abierta 24/7</p>
+          </div>
+          <div className="icon-item text-center">
+            <i className="fas fa-shield-alt fa-2x"></i>
+            <p>Compra 100% Segura</p>
+          </div>
+          <div className="icon-item text-center">
+            <i className="fas fa-exchange-alt fa-2x"></i>
+            <p>Cambios y Devoluciones GRATIS</p>
+          </div>
+          <div className="icon-item text-center">
+            <i className="fas fa-box-open fa-2x"></i>
+            <p>Paga al recibir el pedido</p>
+          </div>
+          <div className="icon-item text-center">
+            <i className="fas fa-map-marker-alt fa-2x"></i>
+            <p>Envíos en 72 Horas a Medellín, Cali y Bogotá</p>
+          </div>
+        </div>
 
       {/* espacio para el footer */}
       <footer className="footer text-center">

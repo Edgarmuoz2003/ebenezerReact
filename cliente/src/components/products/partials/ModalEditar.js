@@ -59,11 +59,18 @@ const ModalEditar = ({
                 />
               </div>
               {preview && (
-              <div>
-                  <img src={preview} alt="Imagen del producto" style={{ width: "100px", height: "auto" }} />
-                  <p>Imagen actual: {loadImage ? loadImage.name : "No hay nueva imagen seleccionada"}</p>
-              </div>
-)}
+                <div>
+                  <img
+                    src={preview}
+                    alt="Imagen del producto"
+                    style={{ width: "100px", height: "auto" }}
+                  />
+                  <p>
+                    Imagen actual:{" "}
+                    {loadImage ? loadImage.name : "No hay nueva imagen seleccionada"}
+                  </p>
+                </div>
+              )}
 
               <div className="mb-3">
                 <label htmlFor="productTitle" className="form-label">
@@ -174,27 +181,14 @@ const ModalEditar = ({
                 <div className="form-check">
                   <input
                     className="form-check-input"
-                    type="radio"
+                    type="checkbox"
                     name="isPromotion"
-                    id="isPromotionYes"
+                    id="isPromotion"
                     checked={isPromotion}
-                    onChange={() => setIsPromotion(true)}
+                    onChange={(e) => setIsPromotion(e.target.checked)}
                   />
-                  <label className="form-check-label" htmlFor="isPromotionYes">
+                  <label className="form-check-label" htmlFor="isPromotion">
                     Promoción
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="isPromotion"
-                    id="isPromotionNo"
-                    checked={!isPromotion}
-                    onChange={() => setIsPromotion(false)}
-                  />
-                  <label className="form-check-label" htmlFor="isPromotionNo">
-                    No Promoción
                   </label>
                 </div>
               </div>
@@ -203,40 +197,21 @@ const ModalEditar = ({
                 <div className="form-check">
                   <input
                     className="form-check-input"
-                    type="radio"
+                    type="checkbox"
                     name="isFeatured"
-                    id="isFeaturedYes"
+                    id="isFeatured"
                     checked={isFeatured}
-                    onChange={() => setIsFeatured(true)}
+                    onChange={(e) => setIsFeatured(e.target.checked)}
                   />
-                  <label className="form-check-label" htmlFor="isFeaturedYes">
+                  <label className="form-check-label" htmlFor="isFeatured">
                     Producto Destacado
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="isFeatured"
-                    id="isFeaturedNo"
-                    checked={!isFeatured}
-                    onChange={() => setIsFeatured(false)}
-                  />
-                  <label className="form-check-label" htmlFor="isFeaturedNo">
-                    No Destacado
                   </label>
                 </div>
               </div>
 
               <div className="modal-footer">
                 {error && <div className="alert alert-danger">{error}</div>}
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancelar
-                </button>
+                
                 <button type="submit" className="btn btn-primary">
                   Guardar Cambios
                 </button>

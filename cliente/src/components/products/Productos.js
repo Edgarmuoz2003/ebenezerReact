@@ -146,8 +146,8 @@ const Productos = () => {
       "sizes",
       JSON.stringify(Object.keys(sizes).filter((size) => sizes[size]))
     );
-    formData.append("isPromotion", isPromotion);
-    formData.append("isFeatured", isFeatured);
+    formData.append("isPromotion", isPromotion ? "true" : "false");
+    formData.append("isFeatured", isFeatured ? "true" : "false");
 
     try {
       await axios.put(
@@ -159,9 +159,12 @@ const Productos = () => {
           },
         }
       );
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
       await resetValues();
       Swal.fire("Éxito", "El Producto ha Sido Actualizado", "success");
-      window.location.reload();
+     
     } catch (error) {
       console.error("Error al actualizar el producto:", error);
       Swal.fire("Error", "El Producto no ha Sido Actualizado", "error");
@@ -220,18 +223,23 @@ const Productos = () => {
                   <p className="card-text">${productos.productPrice}</p>
                 </div>
                 <div className="card-footer">
-                 <div className="col-md-3">
-                 <button
-                    type="button"
-                    className="btn btn-primary btn-sm"
-                    data-bs-toggle="modal"
-                    data-bs-target="#ModalEditar"
-                    onClick={() => handleEditProduct(productos)}
-                  >
-                    Editar
-                  </button>
-                  <button className="btn btn-danger"  onClick={() => handleDeleteProduct(productos)}>Eliminar</button>
-                 </div>
+                  <div className="col-md-3 d-flex justify-content-between">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm w-100 me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#ModalEditar"
+                      onClick={() => handleEditProduct(productos)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm w-100"
+                      onClick={() => handleDeleteProduct(productos)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -262,18 +270,17 @@ const Productos = () => {
     setLoadImage(null); // O mantener la imagen previa si necesitas subir una nueva
   };
 
-  const handleDeleteProduct = async (producto)=>{
+  const handleDeleteProduct = async (producto) => {
     try {
-      console.log("El id del producto es: ", producto.id)
-      await axios.delete(`http://localhost:4000/api/productos/${producto.id}`)
-    Swal.fire("Éxito", "El Producto ha Sido Eliminado", "success");
-    window.location.reload();
+      console.log("El id del producto es: ", producto.id);
+      await axios.delete(`http://localhost:4000/api/productos/${producto.id}`);
+      Swal.fire("Éxito", "El Producto ha Sido Eliminado", "success");
+      window.location.reload();
     } catch (error) {
       console.error("Error al eliminar el producto:", error);
       Swal.fire("Error", "El Producto no ha Sido Eliminado", "error");
     }
-    
-  }
+  };
 
   return (
     <MainLayout>
