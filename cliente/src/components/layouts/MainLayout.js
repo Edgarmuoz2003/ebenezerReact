@@ -1,6 +1,7 @@
 import { useAuth } from "../Auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import './MainLayout.css';
+import BtnWsp from "../products/partials/btn-wsp";
 
 const MainLayout = ({ children }) => {
   const { isAuthenticated, logout, nombre } = useAuth();
@@ -8,6 +9,7 @@ const MainLayout = ({ children }) => {
 
   return (
     <div>
+      <BtnWsp/>
       <header>
         {/* inicio primer nav */}
         <nav className="navbar navbar-expand-lg bg-body-tertiary">

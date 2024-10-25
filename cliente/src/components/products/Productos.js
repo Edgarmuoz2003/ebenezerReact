@@ -363,16 +363,30 @@ const Productos = () => {
 
         <section className="seccion-tab-productos">
           <ul className="nav nav-tabs mt-4" id="myTab" role="tablist">
-            <li className="nav-item" role="presentation">
+          <li className="nav-item" role="presentation">
               <button
                 className="nav-link active"
+                id="tab-todos"
+                data-bs-toggle="tab"
+                data-bs-target="#todos-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="todos-tab-pane"
+                aria-selected="true"
+              >
+                Ver Todos
+              </button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button
+                className="nav-link"
                 id="tab-camisetas"
                 data-bs-toggle="tab"
                 data-bs-target="#camisetas-tab-pane"
                 type="button"
                 role="tab"
                 aria-controls="camisetas-tab-pane"
-                aria-selected="true"
+                aria-selected="false"
               >
                 Camisetas
               </button>
@@ -435,9 +449,21 @@ const Productos = () => {
             </li>
           </ul>
           <div className="tab-content" id="myTabContent">
+             {/* inicio Contenido ver Todos */}
+             <div
+              className="tab-pane fade show active mt-4"
+              id="todos-tab-pane"
+              role="tabpanel"
+              aria-labelledby="tab-todos"
+              tabIndex="0"
+            >
+              {renderProducts(productos)}
+            </div>
+            {/* fin Contenido ver Todos */}
+
             {/* inicio Contenido Camisetas */}
             <div
-              className="tab-pane fade show active mt-4"
+              className="tab-pane fade  mt-4"
               id="camisetas-tab-pane"
               role="tabpanel"
               aria-labelledby="tab-camisetas"

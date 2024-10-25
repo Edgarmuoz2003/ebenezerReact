@@ -4,6 +4,7 @@ import { useProducts } from "../products/ProductsProvider";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 
+
 const Home = () => {
   const [error, setError] = useState(null);
   const { productos, loading, errorProductos } = useProducts();
@@ -22,6 +23,7 @@ const Home = () => {
   
     return (
       <div className="row">
+        
         {filteredProducts.map((producto) => (
           <div className="col-md-3 mb-4" key={producto.id}>
             <div className="card card-inicio h-100">
